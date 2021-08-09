@@ -2,6 +2,7 @@
 const User = require('../model/users');
 
 exports.getAllUsers = (req, res)=>{
+    console.log(req.user)
     User.findAll()
     .then(user=>{
         res.json(user)

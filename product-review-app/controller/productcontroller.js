@@ -13,8 +13,13 @@ exports.createProduct = (req, res, next) => {
   const title = req.body.title;
   const price = req.body.price;
   const review = req.body.review;
+  const username = req.user.username;
+  const userId = req.user.id;
+  const rating = req.body.rating;
+  const rev= []
 
-  const prod = new Product(null, title, price,review);
+  rev.push({user:{id:userId, username: username},review:review,rating:rating})
+  const prod = new Product(null, title,price,rev,);
   prod
     .save()
     .then((result) => {
@@ -22,6 +27,7 @@ exports.createProduct = (req, res, next) => {
     })
     .catch((err) => console.log(err));
 };
+
 
 exports.deleteProduct = (req, res, next) => {
   Product.deleteById(req.params.id)
@@ -31,16 +37,31 @@ exports.deleteProduct = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
-exports.editProduct = (req, res, next) => {
+exports.addreview = (req, res, next) => {
+  let id = req.body._id
+  let rating = req.body.rating
+  let review = req.body.review
+  const username = req.user.username
+
+  let revObject ={
+    user: {
+      id: id,
+      username :username
+    },
+    review : review,
+    rating : rating
+  };
+  
   const updatedProduct = new Product(
     req.body._id,
     req.body.title,
-    req.body.price
+    req.body.price,
+    revObject
   );
   console.log(updatedProduct);
 
   updatedProduct
-    .updateProduct()
+    .addNewReview()
     .then((result) => {
       res.json({ status: "success" });
     })

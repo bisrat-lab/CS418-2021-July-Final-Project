@@ -7,6 +7,7 @@ class Product {
         this.title = title;
         this.price = price;
         this.reviews = reviews;
+
     }
     static findAll() {
         const db = getDB();
@@ -26,6 +27,7 @@ class Product {
             .findOne({ _id: new ObjectId(id) });
     }
 
+
     static deleteById(prodId) {
         const db = getDB();
         return db.collection('products')
@@ -39,6 +41,16 @@ class Product {
                 $set: {
                     title:this.title,
                     price:this.price
+                }
+            });
+    }
+  
+    addNewReview() {
+        const db = getDB();
+        return db.collection('products')
+            .updateOne({ _id: new ObjectId(this._id) }, {
+                $push: {
+                   reviews:this.reviews
                 }
             });
     }
